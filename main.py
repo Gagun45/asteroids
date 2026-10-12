@@ -1,5 +1,6 @@
 import pygame
 from constants import GAME_DIFFICULTY, SCREEN_HEIGHT, SCREEN_WIDTH
+from explosion import Explosion
 from game import Game
 from logger import log_state, log_event
 from player import Player
@@ -14,11 +15,13 @@ def main():
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
+    explosions = pygame.sprite.Group()
     
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     Shot.containers = (shots, updatable, drawable)
     AsteroidField.containers = (updatable)
+    Explosion.containers = (explosions, drawable, updatable)
     Info.containers = (drawable,)
     game = Game(0,3, GAME_DIFFICULTY.HARD)
 
@@ -77,7 +80,7 @@ def main():
                 if a.collides_with(s):
                     log_event('asteroid_shot')
                     game.update_score(a.points)
-                    a.split()
+                    a.split(screen)
                     s.kill()
 
 

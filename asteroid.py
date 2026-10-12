@@ -1,4 +1,5 @@
 import random
+from explosion import Explosion
 from logger import log_event
 from circleshape import CircleShape
 import pygame
@@ -13,6 +14,11 @@ class Asteroid(CircleShape):
         
     def draw(self, screen: pygame.Surface) -> None:
         pygame.draw.circle(screen, 'white', self.position, self.radius, LINE_WIDTH)
+    
+    def explode(self, screen: pygame.Surface)->None:
+        explosion = Explosion(self.position.x, self.position.y, self.radius)
+        explosion.draw(screen)
+        self.kill()
     
     def bounce(self, x:bool = False, y:bool= False):
         self.velocity.x *= -1 if x else 1
@@ -31,8 +37,8 @@ class Asteroid(CircleShape):
                     self.bounce(y=True)
 
     
-    def split(self)->None:
-        self.kill()
+    def split(self, screen: pygame.Surface)->None:
+        self.explode(screen)
         if self.radius <= ASTEROID_MIN_RADIUS:
             return
         log_event('asteroid_split')
