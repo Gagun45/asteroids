@@ -2,11 +2,13 @@ import random
 from logger import log_event
 from circleshape import CircleShape
 import pygame
-from constants import LINE_WIDTH, ASTEROID_MIN_RADIUS, SCREEN_HEIGHT,SCREEN_WIDTH
+from constants import ASTEROID_KINDS, LINE_WIDTH, ASTEROID_MIN_RADIUS, SCREEN_HEIGHT,SCREEN_WIDTH
 
 class Asteroid(CircleShape):
-    def __init__(self, x:float, y:float, radius: float) -> None:
+    def __init__(self, x:float, y:float, radius: float, kind: int) -> None:
         super().__init__(x,y,radius)
+        self.kind = kind
+        self.points = (ASTEROID_KINDS - kind + 1 ) * 5
         
     def draw(self, screen: pygame.Surface) -> None:
         pygame.draw.circle(screen, 'white', self.position, self.radius, LINE_WIDTH)
@@ -26,8 +28,8 @@ class Asteroid(CircleShape):
         first_vector = self.velocity.rotate(rand_angle)
         second_vector = self.velocity.rotate(-rand_angle)
         new_radius = self.radius - ASTEROID_MIN_RADIUS
-        first_ast = Asteroid(self.position.x, self.position.y, new_radius)
-        second_ast = Asteroid(self.position.x, self.position.y, new_radius)
+        first_ast = Asteroid(self.position.x, self.position.y, new_radius, self.kind-1)
+        second_ast = Asteroid(self.position.x, self.position.y, new_radius, self.kind-1)
         first_ast.velocity = first_vector * 1.2
         second_ast.velocity = second_vector * 1.2
         

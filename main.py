@@ -58,8 +58,7 @@ def main():
 
         for a in asteroids:
             if isinstance(a, Asteroid):    
-                collision = a.collides_with(player)[0]
-                if collision:
+                if a.collides_with(player):
                     log_event('player_hit')
                     a.kill()
                     player.respawn()
@@ -69,10 +68,9 @@ def main():
                         sys.exit(1)
             for s in shots:
                 if isinstance(s, Shot):
-                    collision, points = a.collides_with(s)
-                    if collision:
+                    if a.collides_with(s):
                         log_event('asteroid_shot')
-                        info.update_score(points)
+                        info.update_score(a.points)
                         a.split()
                         s.kill()
 

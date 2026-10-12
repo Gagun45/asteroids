@@ -7,7 +7,7 @@ from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 class CircleShape(pygame.sprite.Sprite):
     containers: tuple[pygame.sprite.Group, ...]
 
-    def __init__(self, x: float, y: float, radius: float) -> None:
+    def __init__(self, x: float, y: float, radius: float, points: int = 0) -> None:
         # we will be using this later
         if hasattr(self, "containers"):
             super().__init__(*self.containers)
@@ -16,6 +16,7 @@ class CircleShape(pygame.sprite.Sprite):
         self.position: pygame.Vector2 = pygame.Vector2(x, y)
         self.velocity = pygame.Vector2(0, 0)
         self.radius = radius
+        self.points = points
 
     def draw(self, screen: pygame.Surface) -> None:
         # must override
@@ -50,6 +51,6 @@ class CircleShape(pygame.sprite.Sprite):
     def reached_any_border(self, include_radius:bool=False, include_radius_X:bool = False, include_radius_Y:bool=False)->bool:
         return self.reached_X_border(include_radius or include_radius_X) or self.reached_Y_border(include_radius or include_radius_Y) 
 
-    def collides_with(self, other: "CircleShape")->tuple[bool, int]:
+    def collides_with(self, other: "CircleShape")->bool:
         distance = self.position.distance_to(other.position)
-        return distance <= self.radius + other.radius, int(100 // distance)
+        return distance <= self.radius + other.radius
