@@ -19,7 +19,7 @@ def main():
     AsteroidField.containers = (updatable)
 
     player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
-    astField = AsteroidField()
+    AsteroidField()
 
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
     print(f'Screen width: {SCREEN_WIDTH}')
