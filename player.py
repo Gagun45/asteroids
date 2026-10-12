@@ -1,7 +1,8 @@
-from circleshape import CircleShape
-from shot import Shot
-from constants import PLAYER_RADIUS, PLAYER_SHOOT_COOLDOWN_SECONDS, PLAYER_SHOOT_SPEED, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED
 import pygame
+
+from circleshape import CircleShape
+from constants import  PLAYER_RADIUS, SCREEN_HEIGHT, SCREEN_WIDTH, PLAYER_SHOOT_COOLDOWN_SECONDS, PLAYER_SHOOT_SPEED, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED
+from shot import Shot
 
 class Player(CircleShape):
     def __init__(self, x: float, y:float):
@@ -42,6 +43,10 @@ class Player(CircleShape):
         rotated_vector = unit_vector.rotate(self.rotation)
         rotated_with_speed_vector = rotated_vector * PLAYER_SPEED * dt
         self.position += rotated_with_speed_vector
+        if self.reached_any_border():
+            x = SCREEN_WIDTH/2
+            y = SCREEN_HEIGHT/2
+            self.position = pygame.Vector2(x,y)
     
     def shoot(self):
         if self.cooldown > 0:
@@ -51,3 +56,11 @@ class Player(CircleShape):
         unit_vector = pygame.Vector2(0,1)
         rotated_unit_vector = unit_vector.rotate(self.rotation) * PLAYER_SHOOT_SPEED
         shot.velocity = rotated_unit_vector
+    
+    def respawn(self, x: int | None = None, y: int | None = None):
+        pos_x = SCREEN_WIDTH/2 if x is None else x
+        pos_y = SCREEN_HEIGHT/2 if y is None else y
+        self.position = pygame.Vector2(pos_x,pos_y)
+        self.radius = PLAYER_RADIUS
+        self.rotation = 0
+        self.cooldown = 0

@@ -18,7 +18,7 @@ def main():
     Asteroid.containers = (asteroids, updatable, drawable)
     Shot.containers = (shots, updatable, drawable)
     AsteroidField.containers = (updatable)
-    Info.containers = (drawable)
+    Info.containers = (drawable,)
 
 
     info = Info(2, 2, 200, 100, 0, 3)
@@ -35,6 +35,11 @@ def main():
     dt = 0.0
 
     while True:
+        # prev = float('-inf')
+        # current = len(asteroids)
+        # if (prev != current):
+        #     print('current: ', current)
+        #     prev = current
         log_state()
 
         for event in pygame.event.get():
@@ -57,6 +62,7 @@ def main():
                 if collision:
                     log_event('player_hit')
                     a.kill()
+                    player.respawn()
                     info.update_lives(-1)
                     if info.lives<=0:
                         print('Game over!')

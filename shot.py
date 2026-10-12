@@ -1,5 +1,5 @@
 from circleshape import CircleShape
-from constants import SHOT_RADIUS, LINE_WIDTH
+from constants import SHOT_RADIUS, LINE_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH
 import pygame
 
 class Shot(CircleShape):
@@ -10,4 +10,6 @@ class Shot(CircleShape):
         pygame.draw.circle(screen, 'white', self.position, self.radius, LINE_WIDTH)
     
     def update(self, dt: float) -> None:
-        self.position += self.velocity * dt 
+        self.position += self.velocity * dt
+        if self.reached_any_border(include_radius=True):
+            self.kill()
