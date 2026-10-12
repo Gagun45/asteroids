@@ -15,13 +15,18 @@ class Info(RectShape):
         text_lines:list[tuple[str, str]] = []
         
         score_text = f'Score: {self.game.score}'
+        level_text = f'Level: {self.game.level}'
+        next_level_score_next = f'Next: {self.game.next_level_score}'
         score_color = 'green'
+
         
         lives_text = f'Lives: {self.game.lives}'
         lives_color = 'blue'
         
         
         text_lines.append((score_text, score_color))
+        text_lines.append((level_text, score_color))
+        text_lines.append((next_level_score_next, score_color))
         text_lines.append((lives_text, lives_color))
         
         for index, line in enumerate(text_lines):

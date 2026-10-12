@@ -2,6 +2,7 @@ import pygame
 from constants import GAME_DIFFICULTY, SCREEN_HEIGHT, SCREEN_WIDTH
 from explosion import Explosion
 from game import Game
+from heart import Heart
 from logger import log_state, log_event
 from player import Player
 from asteroid import Asteroid
@@ -16,6 +17,7 @@ def main():
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
     explosions = pygame.sprite.Group()
+    hearts = pygame.sprite.Group()
     
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
@@ -23,10 +25,11 @@ def main():
     AsteroidField.containers = (updatable)
     Explosion.containers = (explosions, drawable, updatable)
     Info.containers = (drawable,)
+    Heart.containers = (hearts, drawable, updatable)
     game = Game(0,3, GAME_DIFFICULTY.HARD)
 
     info = Info(2, 2, 200, 100, game)
-    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, game)
     AsteroidField(game)
 
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
@@ -82,6 +85,12 @@ def main():
                     game.update_score(a.points)
                     a.split(screen)
                     s.kill()
+        for heart in hearts:
+            if not isinstance(heart, Heart):
+                continue
+            if heart.collides_with(player):
+                game.update_lives(1)
+                heart.kill()
 
 
 if __name__ == "__main__":

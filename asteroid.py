@@ -1,5 +1,6 @@
 import random
 from explosion import Explosion
+from heart import Heart
 from logger import log_event
 from circleshape import CircleShape
 import pygame
@@ -16,8 +17,10 @@ class Asteroid(CircleShape):
         pygame.draw.circle(screen, 'white', self.position, self.radius, LINE_WIDTH)
     
     def explode(self, screen: pygame.Surface)->None:
+        chance = random.randint(0,10)
+        if chance==1:
+            heart = Heart(self.position.x, self.position.y, self.radius)
         explosion = Explosion(self.position.x, self.position.y, self.radius)
-        explosion.draw(screen)
         self.kill()
     
     def bounce(self, x:bool = False, y:bool= False):

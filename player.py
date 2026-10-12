@@ -2,13 +2,15 @@ import pygame
 
 from circleshape import CircleShape
 from constants import  PLAYER_RADIUS, SCREEN_HEIGHT, SCREEN_WIDTH, PLAYER_SHOOT_COOLDOWN_SECONDS, PLAYER_SHOOT_SPEED, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED
+from game import Game
 from shot import Shot
 
 class Player(CircleShape):
-    def __init__(self, x: float, y:float):
+    def __init__(self, x: float, y:float, game: Game):
         super().__init__(x,y, PLAYER_RADIUS)
         self.rotation = 0
         self.cooldown = 0
+        self.game = game
         
     def triangle(self) -> list[pygame.Vector2]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -60,10 +62,21 @@ class Player(CircleShape):
         if self.cooldown > 0:
             return
         self.cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS
-        shot = Shot(self.position.x, self.position.y)
-        unit_vector = pygame.Vector2(0,1)
-        rotated_unit_vector = unit_vector.rotate(self.rotation) * PLAYER_SHOOT_SPEED
-        shot.velocity = rotated_unit_vector
+        r = range(0,1)
+        angle = 0
+        if self.game.level > 1:
+            angle = 5
+        if self.game.level > 2:
+            r = range(-1,2)
+        if self.game.level > 3:
+            angle = 10
+            r = range(-2,3)
+        for i in r:
+            shot = Shot(self.position.x, self.position.y)
+            unit_vector = pygame.Vector2(0,1)
+            rotated_unit_vector = unit_vector.rotate(self.rotation + i*angle) * PLAYER_SHOOT_SPEED
+            shot.velocity = rotated_unit_vector
+
     
     def respawn(self, x: int | None = None, y: int | None = None):
         pos_x = SCREEN_WIDTH/2 if x is None else x
