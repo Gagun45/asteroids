@@ -22,7 +22,7 @@ class Player(CircleShape):
     
     def rotate(self, dt: float):
         self.rotation +=dt*PLAYER_TURN_SPEED
-        
+    
     def update(self, dt: float) -> None:
         self.cooldown-=dt
         keys = pygame.key.get_pressed()
