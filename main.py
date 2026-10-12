@@ -1,5 +1,6 @@
 import pygame
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from constants import GAME_DIFFICULTY, SCREEN_HEIGHT, SCREEN_WIDTH
+from game import Game
 from logger import log_state, log_event
 from player import Player
 from asteroid import Asteroid
@@ -19,11 +20,11 @@ def main():
     Shot.containers = (shots, updatable, drawable)
     AsteroidField.containers = (updatable)
     Info.containers = (drawable,)
+    game = Game(0,3, GAME_DIFFICULTY.HARD)
 
-
-    info = Info(2, 2, 200, 100, 0, 3)
+    info = Info(2, 2, 200, 100, game)
     player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
-    ast_field = AsteroidField()
+    AsteroidField(game)
 
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
     print(f'Screen width: {SCREEN_WIDTH}')
@@ -35,11 +36,6 @@ def main():
     dt = 0.0
 
     while True:
-        # prev = float('-inf')
-        # current = len(asteroids)
-        # if (prev != current):
-        #     print('current: ', current)
-        #     prev = current
         log_state()
 
         for event in pygame.event.get():
@@ -57,22 +53,30 @@ def main():
         updatable.update(dt)
 
         for a in asteroids:
-            if isinstance(a, Asteroid):    
-                if a.collides_with(player):
-                    log_event('player_hit')
-                    a.kill()
-                    player.respawn()
-                    info.update_lives(-1)
-                    if info.lives<=0:
-                        print('Game over!')
-                        sys.exit(1)
+            if not isinstance(a, Asteroid):
+                continue   
+            if a.collides_with(player):
+                log_event('player_hit')
+                a.kill()
+                player.respawn()
+                game.update_lives(-1)
+                if game.lives<=0:
+                    print('Game over!')
+                    sys.exit(1)
+                need_to_break = False
+                for ast in asteroids:
+                    ast.kill()
+                    need_to_break = True
+                if need_to_break:
+                    break
             for s in shots:
-                if isinstance(s, Shot):
-                    if a.collides_with(s):
-                        log_event('asteroid_shot')
-                        info.update_score(a.points)
-                        a.split()
-                        s.kill()
+                if not isinstance(s, Shot):
+                    continue
+                if a.collides_with(s):
+                    log_event('asteroid_shot')
+                    game.update_score(a.points)
+                    a.split()
+                    s.kill()
 
 
 if __name__ == "__main__":

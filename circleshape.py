@@ -26,30 +26,33 @@ class CircleShape(pygame.sprite.Sprite):
         # must override
         pass
     
-    def reached_top_border(self, include_radius:bool = False)->bool:
-        padding = self.radius if include_radius else 0
-        return self.position.y < -padding
+    def reached_top_border(self, padding:float = 0.0)->bool:
+        return self.position.y < -padding and self.velocity.y < 0
 
-    def reached_bottom_border(self, include_radius:bool = False)->bool:
-            padding = self.radius if include_radius else 0
-            return self.position.y > SCREEN_HEIGHT + padding
+    def reached_bottom_border(self, padding:float = 0.0)->bool:
+            return self.position.y > SCREEN_HEIGHT + padding and self.velocity.y > 0
     
-    def reached_left_border(self, include_radius:bool = False)->bool:
-        padding = self.radius if include_radius else 0
-        return self.position.x < -padding
+    def reached_left_border(self, padding:float = 0.0)->bool:
+        return self.position.x < -padding and self.velocity.x < 0
     
-    def reached_right_border(self, include_radius:bool = False)->bool:
-        padding = self.radius if include_radius else 0
-        return self.position.x > SCREEN_WIDTH + padding
+    def reached_right_border(self, padding:float = 0.0)->bool:
+        return self.position.x > SCREEN_WIDTH + padding and self.velocity.x > 0
     
-    def reached_X_border(self, include_radius:bool = False, include_radius_left:bool = False, include_radius_right:bool = False)->bool:
-        return self.reached_left_border(include_radius or include_radius_left) or self.reached_right_border(include_radius or include_radius_right)
+    def reached_X_border(self, padding:float | None = None, padding_left:float | None = None, padding_right:float | None = None)->bool:
+        pl: float = padding_left if padding_left is not None else padding if padding is not None else 0.0
+        pr: float = padding_right if padding_right is not None else padding if padding is not None else 0.0
+        return self.reached_left_border(pl) or self.reached_right_border(pr)
     
-    def reached_Y_border(self, include_radius:bool = False,include_radius_top:bool = False, include_radius_bottom:bool = False)->bool:
-        return self.reached_top_border(include_radius or include_radius_top) or self.reached_bottom_border(include_radius or include_radius_bottom)
+    def reached_Y_border(self, padding:float | None = None, padding_top:float | None = None, padding_bottom:float | None = None)->bool:
+        pt: float = padding_top if padding_top is not None else padding if padding is not None else 0.0
+        pb: float = padding_bottom if padding_bottom is not None else padding if padding is not None else 0.0
+        return self.reached_top_border(pt) or self.reached_bottom_border(pb)
     
-    def reached_any_border(self, include_radius:bool=False, include_radius_X:bool = False, include_radius_Y:bool=False)->bool:
-        return self.reached_X_border(include_radius or include_radius_X) or self.reached_Y_border(include_radius or include_radius_Y) 
+    def reached_any_border(self, padding:float | None = None, padding_x:float | None = None, padding_y:float | None = None)->bool:
+        px: float = padding_x if padding_x is not None else padding if padding is not None else 0.0
+        py: float= padding_y if padding_y is not None else padding if padding is not None else 0.0
+        
+        return self.reached_X_border(px) or self.reached_Y_border(py) 
 
     def collides_with(self, other: "CircleShape")->bool:
         distance = self.position.distance_to(other.position)

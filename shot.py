@@ -11,5 +11,5 @@ class Shot(CircleShape):
     
     def update(self, dt: float) -> None:
         self.position += self.velocity * dt
-        if self.reached_any_border(include_radius=True):
+        if self.reached_any_border(self.radius):
             self.kill()

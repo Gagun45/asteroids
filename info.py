@@ -1,22 +1,23 @@
+from constants import GAME_DIFFICULTY
+from game import Game
 from rectshape import RectShape
 from player import Player
 import pygame
 
 class Info(RectShape):
-    def __init__(self, left, top, width, height, score: int, lives: int):
+    def __init__(self, left, top, width, height, game: Game):
         super().__init__(left, top, width, height)
-        self.score = score
-        self.lives = lives
+        self.game = game
     
     def draw(self, screen: pygame.Surface):
-        pygame.draw.rect(screen, 'white', self, width=1)
+        pygame.draw.rect(screen, 'white', self.rect, width=1)
         font = pygame.font.Font(None, 28)
         text_lines:list[tuple[str, str]] = []
         
-        score_text = f'Score: {self.score}'
+        score_text = f'Score: {self.game.score}'
         score_color = 'green'
         
-        lives_text = f'Lives: {self.lives}'
+        lives_text = f'Lives: {self.game.lives}'
         lives_color = 'blue'
         
         
@@ -25,11 +26,5 @@ class Info(RectShape):
         
         for index, line in enumerate(text_lines):
             text, color = line
-            to_render = font.render(text, None, color)
+            to_render = font.render(text, False, color)
             screen.blit(to_render, (self.rect.left +10, self.rect.top + 25 + index * 15))
-    
-    def update_score(self, increment: int)->None:
-        self.score += increment
-    
-    def update_lives(self, increment: int)->None:
-        self.lives+=increment

@@ -43,7 +43,7 @@ class Player(CircleShape):
         rotated_vector = unit_vector.rotate(self.rotation)
         rotated_with_speed_vector = rotated_vector * PLAYER_SPEED * dt
         self.position += rotated_with_speed_vector
-        if self.reached_any_border():
+        if self.reached_any_border(self.radius):
             x = SCREEN_WIDTH/2
             y = SCREEN_HEIGHT/2
             self.position = pygame.Vector2(x,y)
