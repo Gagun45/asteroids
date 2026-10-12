@@ -27,16 +27,16 @@ class CircleShape(pygame.sprite.Sprite):
         pass
     
     def reached_top_border(self, padding:float = 0.0)->bool:
-        return self.position.y < -padding and self.velocity.y < 0
+        return self.position.y < -padding
 
     def reached_bottom_border(self, padding:float = 0.0)->bool:
-            return self.position.y > SCREEN_HEIGHT + padding and self.velocity.y > 0
+            return self.position.y > SCREEN_HEIGHT + padding
     
     def reached_left_border(self, padding:float = 0.0)->bool:
-        return self.position.x < -padding and self.velocity.x < 0
+        return self.position.x < -padding
     
     def reached_right_border(self, padding:float = 0.0)->bool:
-        return self.position.x > SCREEN_WIDTH + padding and self.velocity.x > 0
+        return self.position.x > SCREEN_WIDTH + padding
     
     def reached_X_border(self, padding:float | None = None, padding_left:float | None = None, padding_right:float | None = None)->bool:
         pl: float = padding_left if padding_left is not None else padding if padding is not None else 0.0

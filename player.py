@@ -33,20 +33,28 @@ class Player(CircleShape):
         if keys[pygame.K_d]:
             self.rotate(dt)
         if keys[pygame.K_w]:
-            self.move(dt)
+            self.move(dt*3 if keys[pygame.K_LSHIFT] else dt)
         if keys[pygame.K_s]:
-            self.move(-dt)
+            self.move(-dt*3 if keys[pygame.K_LSHIFT] else -dt)
         if keys[pygame.K_SPACE]:
             self.shoot()
+    
+    def wrap(self, left: bool = False, right: bool = False, top: bool = False, bottom: bool = False)->None:
+        x = SCREEN_WIDTH if left else 0 if right else self.position.x
+        y = SCREEN_HEIGHT if top else 0 if bottom else self.position.y
+        self.position = pygame.Vector2(x,y)
+    
     def move(self, dt: float):
         unit_vector = pygame.Vector2(0,1)
         rotated_vector = unit_vector.rotate(self.rotation)
         rotated_with_speed_vector = rotated_vector * PLAYER_SPEED * dt
         self.position += rotated_with_speed_vector
         if self.reached_any_border(self.radius):
-            x = SCREEN_WIDTH/2
-            y = SCREEN_HEIGHT/2
-            self.position = pygame.Vector2(x,y)
+            left=self.reached_left_border(self.radius)
+            right = self.reached_right_border(self.radius)
+            top = self.reached_top_border(self.radius)
+            bottom = self.reached_bottom_border(self.radius)
+            self.wrap(left, right, top, bottom)
     
     def shoot(self):
         if self.cooldown > 0:

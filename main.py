@@ -67,6 +67,8 @@ def main():
                 for ast in asteroids:
                     ast.kill()
                     need_to_break = True
+                for shot in shots:
+                    shot.kill()
                 if need_to_break:
                     break
             for s in shots:
