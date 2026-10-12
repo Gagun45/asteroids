@@ -68,6 +68,7 @@ def main():
                 game.update_lives(-1)
                 if game.lives<=0:
                     print('Game over!')
+                    print(f'Score: {game.score}')
                     sys.exit(1)
                 need_to_break = False
                 for ast in asteroids:
