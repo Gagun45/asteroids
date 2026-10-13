@@ -26,6 +26,10 @@ class Asteroid(CircleShape):
     def bounce(self, x:bool = False, y:bool= False):
         self.velocity.x *= -1 if x else 1
         self.velocity.y *= -1 if y else 1
+        # if x:
+        #     self.velocity *= -1
+        # if y:
+        #     self.velocity *= -1
 
     def update(self, dt: float) -> None:
         self.position += self.velocity * dt
@@ -67,7 +71,10 @@ class Asteroid(CircleShape):
         return self.position.x > SCREEN_WIDTH + padding and self.velocity.x > 0
     
     def reached_X_border(self, padding:float | None = None, padding_left:float | None = None, padding_right:float | None = None)->bool:
+        # padding_left, padding, 0
         pl: float = padding_left if padding_left is not None else padding if padding is not None else 0.0
+        # pl = padding_left or padding or 0
+        
         pr: float = padding_right if padding_right is not None else padding if padding is not None else 0.0
         return self.reached_left_border(pl) or self.reached_right_border(pr)
     

@@ -1,5 +1,3 @@
-from turtle import width
-
 from circleshape import CircleShape
 from constants import SHOT_RADIUS, LINE_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH
 import pygame
